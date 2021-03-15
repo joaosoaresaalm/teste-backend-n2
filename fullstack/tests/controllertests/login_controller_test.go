@@ -31,7 +31,7 @@ func TestSignIn(t *testing.T) {
 	}{
 		{
 			email:        user.Email,
-			password:     "password", //Observe que a senha deve ser esta, não aquela com hash do banco de dados
+			password:     "Akfpt6sg", //Observe que a senha deve ser esta, não aquela com hash do banco de dados
 			errorMessage: "",
 		},
 		{

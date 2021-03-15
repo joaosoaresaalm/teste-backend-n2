@@ -29,49 +29,49 @@ func TestCreateUser(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			inputJSON:    `{"nickname":"Pet", "email": "pet@gmail.com", "password": "password"}`,
+			inputJSON:    `{"nome":"Pet", "email": "pet@gmail.com", "senha": "senha"}`,
 			statusCode:   201,
 			nickname:     "Pet",
 			email:        "pet@gmail.com",
 			errorMessage: "",
 		},
 		{
-			inputJSON:    `{"nickname":"Frank", "email": "pet@gmail.com", "password": "password"}`,
+			inputJSON:    `{"nome":"Frank", "email": "pet@gmail.com", "senha": "senha"}`,
 			statusCode:   500,
-			errorMessage: "Email Already Taken",
+			errorMessage: "Email já existe",
 		},
 		{
-			inputJSON:    `{"nickname":"Pet", "email": "grand@gmail.com", "password": "password"}`,
+			inputJSON:    `{"nome":"Pet", "email": "grand@gmail.com", "senha": "senha"}`,
 			statusCode:   500,
-			errorMessage: "Nickname Already Taken",
+			errorMessage: "Nome já existe",
 		},
 		{
-			inputJSON:    `{"nickname":"Kan", "email": "kangmail.com", "password": "password"}`,
+			inputJSON:    `{"nome":"Kan", "email": "kangmail.com", "senha": "senha"}`,
 			statusCode:   422,
-			errorMessage: "Invalid Email",
+			errorMessage: "Email inválido",
 		},
 		{
-			inputJSON:    `{"nickname": "", "email": "kan@gmail.com", "password": "password"}`,
+			inputJSON:    `{"nome": "", "email": "kan@gmail.com", "senha": "senha"}`,
 			statusCode:   422,
-			errorMessage: "Required Nickname",
+			errorMessage: "Nome obrigatório",
 		},
 		{
-			inputJSON:    `{"nickname": "Kan", "email": "", "password": "password"}`,
+			inputJSON:    `{"nome": "Kan", "email": "", "senha": "senha"}`,
 			statusCode:   422,
-			errorMessage: "Required Email",
+			errorMessage: "Email obrigatório",
 		},
 		{
-			inputJSON:    `{"nickname": "Kan", "email": "kan@gmail.com", "password": ""}`,
+			inputJSON:    `{"nome": "Kan", "email": "kan@gmail.com", "senha": ""}`,
 			statusCode:   422,
-			errorMessage: "Required Password",
+			errorMessage: "Senha obrigatória",
 		},
 	}
 
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/users", bytes.NewBufferString(v.inputJSON))
+		req, err := http.NewRequest("POST", "/usuarios", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
-			t.Errorf("this is the error: %v", err)
+			t.Errorf("Este é o erro: %v", err)
 		}
 		rr := httptest.NewRecorder()
 		handler := http.HandlerFunc(server.Criar)
@@ -80,11 +80,11 @@ func TestCreateUser(t *testing.T) {
 		responseMap := make(map[string]interface{})
 		err = json.Unmarshal([]byte(rr.Body.String()), &responseMap)
 		if err != nil {
-			fmt.Printf("Cannot convert to json: %v", err)
+			fmt.Printf("Não é possível converter em JSON: %v", err)
 		}
 		assert.Equal(t, rr.Code, v.statusCode)
 		if v.statusCode == 201 {
-			assert.Equal(t, responseMap["nickname"], v.nickname)
+			assert.Equal(t, responseMap["nome"], v.nickname)
 			assert.Equal(t, responseMap["email"], v.email)
 		}
 		if v.statusCode == 422 || v.statusCode == 500 && v.errorMessage != "" {
@@ -120,7 +120,7 @@ func TestObter(t *testing.T) {
 	assert.Equal(t, len(users), 2)
 }
 
-func TestGetUserByID(t *testing.T) {
+func TestObterPorId(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -152,7 +152,7 @@ func TestGetUserByID(t *testing.T) {
 
 		req, err := http.NewRequest("GET", "/usuarios", nil)
 		if err != nil {
-			t.Errorf("This is the error: %v\n", err)
+			t.Errorf("Este é o erro: %v\n", err)
 		}
 		req = mux.SetURLVars(req, map[string]string{"id": v.id})
 		rr := httptest.NewRecorder()
@@ -162,7 +162,7 @@ func TestGetUserByID(t *testing.T) {
 		responseMap := make(map[string]interface{})
 		err = json.Unmarshal([]byte(rr.Body.String()), &responseMap)
 		if err != nil {
-			log.Fatalf("Cannot convert to json: %v", err)
+			log.Fatalf("Não é possível converter para JSON: %v", err)
 		}
 
 		assert.Equal(t, rr.Code, v.statusCode)
@@ -194,7 +194,7 @@ func TestAtualizar(t *testing.T) {
 		}
 		AuthID = user.ID
 		AuthEmail = user.Email
-		AuthPassword = "password" // Observe que a senha no banco de dados já está com hash, queremos sem hash
+		AuthPassword = "senha" // Observe que a senha no banco de dados já está com hash, queremos sem hash
 	}
 	// Faça o login do usuário e obtenha o token de autenticação
 	token, err := server.SignIn(AuthEmail, AuthPassword)
@@ -215,7 +215,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Converta int32 em int primeiro antes de converter em string
 			id:             strconv.Itoa(int(AuthID)),
-			atualizarJSON:     `{"nickname":"Grande", "email": "grande@gmail.com", "password": "password"}`,
+			atualizarJSON:     `{"nome":"Grande", "email": "grande@gmail.com", "senha": "senha"}`,
 			statusCodigo:     200,
 			atualizarNome: "Grande",
 			atualizarEmail:    "grande/@gmail.com",
@@ -225,7 +225,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Quando o campo de senha está vazio
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"johnnyboy", "email": "johnnyboy@gmail.com", "password": ""}`,
+			atualizarJSON:   `{"nome":"johnnyboy", "email": "johnnyboy@gmail.com", "senha": ""}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Senha obrigatória",
@@ -233,7 +233,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Quando nenhum token foi passado
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"joe", "email": "joe@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome":"joe", "email": "joe@gmail.com", "senha": "senha"}`,
 			statusCodigo:   401,
 			tokenGiven:   "",
 			erroMessagem: "Não autorizado",
@@ -241,7 +241,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Quando o token incorreto foi passado
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"johnnyboy", "email": "johnnyboy@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome":"johnnyboy", "email": "johnnyboy@gmail.com", "senha": "senha"}`,
 			statusCodigo:   401,
 			tokenGiven:   "Token informado incorreto",
 			erroMessagem: "Não autorizado",
@@ -249,7 +249,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Lembre-se de que joao@gmail.com" pertence ao usuário 2
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"joao", "email": "joao@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome":"joao", "email": "joao@gmail.com", "senha": "senha"}`,
 			statusCodigo:   500,
 			tokenGiven:   tokenString,
 			erroMessagem: "Email com este token já existe",
@@ -257,28 +257,28 @@ func TestAtualizar(t *testing.T) {
 		{
 			// Lembre-se de que "joao" pertence ao usuário 2
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"João Soares", "email": "joaosoaresa.alm@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome":"João Soares", "email": "joaosoaresa.alm@gmail.com", "senha": "senha"}`,
 			statusCodigo:   500,
 			tokenGiven:   tokenString,
 			erroMessagem: "Nome já escolhido ",
 		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname":"Victor", "email": "victorgmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome":"Victor", "email": "victorgmail.com", "senha": "senha"}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Email inválido",
 		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname": "", "email": "vitin@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome": "", "email": "vitin@gmail.com", "senha": "senha"}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Nome obrigatório",
 		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nickname": "Kan", "email": "", "password": "password"}`,
+			atualizarJSON:   `{"nome": "Kan", "email": "", "senha": "senha"}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Email obrigatório",
@@ -291,7 +291,7 @@ func TestAtualizar(t *testing.T) {
 		{
 			//Quando o usuário 2 está usando o token do usuário 1
 			id:           strconv.Itoa(int(2)),
-			atualizarJSON:   `{"nickname": "Victor", "email": "victor@gmail.com", "password": "password"}`,
+			atualizarJSON:   `{"nome": "Victor", "email": "victor@gmail.com", "senha": "senha"}`,
 			tokenGiven:   tokenString,
 			statusCodigo:   401,
 			erroMessagem: "Não autorizado",
@@ -350,7 +350,7 @@ func TestDeletar(t *testing.T) {
 		}
 		AuthID = usuario.ID
 		AuthEmail = usuario.Email
-		AuthPassword = "password" // Observe que a senha no banco de dados já está com hash, queremos sem hash
+		AuthPassword = "senha" // Observe que a senha no banco de dados já está com hash, queremos sem hash
 	}
 	//	Faça o login do usuário e obtenha o token de autenticação
 	token, err := server.SignIn(AuthEmail, AuthPassword)
