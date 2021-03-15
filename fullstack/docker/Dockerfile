@@ -1,44 +1,44 @@
-# Start from golang base image
+# Comece a partir da imagem de base golang
 FROM golang:alpine as builder
 
 # ENV GO111MODULE=on
 
-# Add Maintainer info
+# Adiciona o manutedor do template 
 LABEL maintainer="Joao Soares <joaosoaresa.alm@gmail.com>"
 
-# Install git.
-# Git is required for fetching the dependencies.
+# Instale o git.
+# Git é necessário para buscar as dependências.
 RUN apk update && apk add --no-cache git
 
-# Set the current working directory inside the container 
+# Defina o diretório de trabalho atual dentro do contêiner
 WORKDIR /app
 
-# Copy go mod and sum files 
+# Copiar arquivos go mod e sum
 COPY go.mod go.sum ./
 
-# RUN go mod tidy
 
-# Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed 
+
+# Baixe todas as dependências. As dependências serão armazenadas em cache se os arquivos go.mod e go.sum não forem alterados
 RUN go mod download 
 
-# Copy the source from the current directory to the working Directory inside the container 
+# Copie a fonte do diretório atual para o diretório de trabalho dentro do contêiner
 
 COPY . .
-# Build the Go app
+
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-# Start a new stage from scratch
+
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
-# Copy the Pre-built binary file from the previous stage
+# Copie o arquivo binário pré-construído do estágio anterior
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env .
 
-# Expose port 8080 to the outside world
+# Exponha a porta 8080 
 EXPOSE 8080
 
-#Command to run the executable
+#Comando para rodar o executável
 CMD ["./main"]
