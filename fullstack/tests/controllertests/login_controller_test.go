@@ -42,7 +42,7 @@ func TestLogarDB(t *testing.T) {
 		{
 			email:        "Email errado",
 			password:     "password",
-			errorMessage: "record not found",
+			errorMessage: "Recurso não encontrado",
 		},
 	}
 
