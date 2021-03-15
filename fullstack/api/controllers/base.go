@@ -15,7 +15,7 @@ type Servidor struct {
 	DB     *gorm.DB
 	Router *mux.Router
 }
-
+// Inicializa o db utilizado
 func (server *Servidor) Inicializar(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
 
 	var erro error
