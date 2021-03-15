@@ -69,7 +69,7 @@ func TestCriar(t *testing.T) {
 
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/usuarios", bytes.NewBufferString(v.inputJSON))
+		req, err := http.NewRequest("POST", "/clientes", bytes.NewBufferString(v.inputJSON))
 		if err != nil {
 			t.Errorf("Este é o erro: %v", err)
 		}
@@ -103,7 +103,7 @@ func TestObter(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	req, err := http.NewRequest("GET", "/usuarios", nil)
+	req, err := http.NewRequest("GET", "/clientes", nil)
 	if err != nil {
 		t.Errorf("Este é o erro: %v\n", err)
 	}
@@ -150,7 +150,7 @@ func TestObterPorId(t *testing.T) {
 	}
 	for _, v := range userSample {
 
-		req, err := http.NewRequest("GET", "/usuarios", nil)
+		req, err := http.NewRequest("GET", "/clientes", nil)
 		if err != nil {
 			t.Errorf("Este é o erro: %v\n", err)
 		}
@@ -187,7 +187,7 @@ func TestAtualizar(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Erro ao popular usuário: %v\n", err)
 	}
-	// Get only the first user
+	// Resgata um usuário
 	for _, user := range users {
 		if user.ID == 2 {
 			continue
@@ -300,7 +300,7 @@ func TestAtualizar(t *testing.T) {
 
 	for _, v := range samples {
 
-		req, err := http.NewRequest("POST", "/usuarios", bytes.NewBufferString(v.atualizarJSON))
+		req, err := http.NewRequest("POST", "/clientes", bytes.NewBufferString(v.atualizarJSON))
 		if err != nil {
 			t.Errorf("Este é o erro: %v\n", err)
 		}
@@ -401,7 +401,7 @@ func TestDeletar(t *testing.T) {
 	}
 	for _, v := range usuarioModel {
 
-		req, err := http.NewRequest("GET", "/usuarios", nil)
+		req, err := http.NewRequest("GET", "/clientes", nil)
 		if err != nil {
 			t.Errorf("Este é o erro: %v\n", err)
 		}
