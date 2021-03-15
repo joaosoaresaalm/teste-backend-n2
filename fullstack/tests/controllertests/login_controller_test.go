@@ -15,11 +15,11 @@ import (
 
 func TestLogarDB(t *testing.T) {
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
-	user, err := seedOneUser()
+	user, err := popularUmUsuario()
 	if err != nil {
 		fmt.Printf("Este é o erro %v\n", err)
 	}
@@ -31,7 +31,7 @@ func TestLogarDB(t *testing.T) {
 	}{
 		{
 			email:        user.Email,
-			password:     "Akfpt6sg", //Observe que a senha deve ser esta, não aquela com hash do banco de dados
+			password:     "password", //Observe que a senha deve ser esta, não aquela com hash do banco de dados
 			errorMessage: "",
 		},
 		{
@@ -59,9 +59,9 @@ func TestLogarDB(t *testing.T) {
 
 func TestLogin(t *testing.T) {
 
-	refreshUserTable()
+	atualizarTabelaUsuario()
 
-	_, err := seedOneUser()
+	_, err := popularUmUsuario()
 	if err != nil {
 		fmt.Printf("Este é o erro %v\n", err)
 	}
@@ -78,7 +78,7 @@ func TestLogin(t *testing.T) {
 			errorMessage: "",
 		},
 		{
-			inputJSON:    `{"email": "vitao@gmail.com", "senha": "password eele"}`,
+			inputJSON:    `{"email": "vitao@gmail.com", "senha": "atualizarTabelaUsuario"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Password",
 		},

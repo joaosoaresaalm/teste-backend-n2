@@ -45,7 +45,7 @@ func Database() {
 	}
 }
 
-func refreshUserTable() error {
+func atualizarTabelaUsuario() error {
 
 	err := server.DB.DropTableIfExists(&models.Usuario{}).Error
 	if err != nil {
@@ -60,9 +60,9 @@ func refreshUserTable() error {
 	return nil
 }
 
-func seedOneUser() (models.Usuario, error) {
+func popularUmUsuario() (models.Usuario, error) {
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +80,7 @@ func seedOneUser() (models.Usuario, error) {
 	return user, nil
 }
 
-func seedUsers() ([]models.Usuario, error) {
+func popularUsuario() ([]models.Usuario, error) {
 
 	var err error
 	if err != nil {

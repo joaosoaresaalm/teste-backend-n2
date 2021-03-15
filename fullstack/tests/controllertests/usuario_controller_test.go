@@ -17,7 +17,7 @@ import (
 
 func TestCriar(t *testing.T) {
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,11 +95,11 @@ func TestCriar(t *testing.T) {
 
 func TestObter(t *testing.T) {
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = seedUsers()
+	_, err = popularUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -122,11 +122,11 @@ func TestObter(t *testing.T) {
 
 func TestObterPorId(t *testing.T) {
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
-	user, err := seedOneUser()
+	user, err := popularUmUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -179,11 +179,11 @@ func TestAtualizar(t *testing.T) {
 	var AuthEmail, AuthPassword string
 	var AuthID uint32
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
-	users, err := seedUsers() // Precisamos de pelo menos dois usuários para verificar adequadamente a atualização
+	users, err := popularUsuario() // Precisamos de pelo menos dois usuários para verificar adequadamente a atualização
 	if err != nil {
 		log.Fatalf("Erro ao popular usuário: %v\n", err)
 	}
@@ -334,12 +334,12 @@ func TestDeletar(t *testing.T) {
 	var AuthEmail, AuthPassword string
 	var AuthID uint32
 
-	err := refreshUserTable()
+	err := atualizarTabelaUsuario()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	usuarios, err := seedUsers() // Precisamos de pelo menos dois usuários para verificar adequadamente a atualização
+	usuarios, err := popularUsuario() // Precisamos de pelo menos dois usuários para verificar adequadamente a atualização
 	if err != nil {
 		log.Fatalf("Erro ao propagar usuário: %v\n", err)
 	}

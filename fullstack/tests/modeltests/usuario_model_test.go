@@ -9,7 +9,7 @@ import (
 	"gopkg.in/go-playground/assert.v1"
 )
 
-func TestFindAllUsers(t *testing.T) {
+func TestObterTodos(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -29,7 +29,7 @@ func TestFindAllUsers(t *testing.T) {
 	assert.Equal(t, len(*users), 2)
 }
 
-func TestSaveUser(t *testing.T) {
+func TestSalvar(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -51,7 +51,7 @@ func TestSaveUser(t *testing.T) {
 	assert.Equal(t, newUser.Nome, savedUser.Nome)
 }
 
-func TestGetUserByID(t *testing.T) {
+func TestObterPorId(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -72,7 +72,7 @@ func TestGetUserByID(t *testing.T) {
 	assert.Equal(t, foundUser.Nome, user.Nome)
 }
 
-func TestUpdateAUser(t *testing.T) {
+func TestAtualizar(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -81,7 +81,7 @@ func TestUpdateAUser(t *testing.T) {
 
 	user, err := seedUser()
 	if err != nil {
-		log.Fatalf("Cannot seed user: %v\n", err)
+		log.Fatalf("Não é possivel popular um usuario: %v\n", err)
 	}
 
 	userUpdate := models.Usuario{
@@ -92,7 +92,7 @@ func TestUpdateAUser(t *testing.T) {
 	}
 	updatedUser, err := userUpdate.Atualizar(server.DB, user.ID)
 	if err != nil {
-		t.Errorf("this is the error updating the user: %v\n", err)
+		t.Errorf("Este é o erro após tentar atualizar um usuário: %v\n", err)
 		return
 	}
 	assert.Equal(t, updatedUser.ID, userUpdate.ID)
@@ -100,7 +100,7 @@ func TestUpdateAUser(t *testing.T) {
 	assert.Equal(t, updatedUser.Nome, userUpdate.Nome)
 }
 
-func TestDeleteAUser(t *testing.T) {
+func TestDeletar(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -110,12 +110,12 @@ func TestDeleteAUser(t *testing.T) {
 	user, err := seedUser()
 
 	if err != nil {
-		log.Fatalf("Cannot seed user: %v\n", err)
+		log.Fatalf("Não é possivel popular usuário: %v\n", err)
 	}
 
 	isDeleted, err := userInstance.Deletar(server.DB, user.ID)
 	if err != nil {
-		t.Errorf("this is the error deleting the user: %v\n", err)
+		t.Errorf("Este é o erro ao excluir o usuário: %v\n", err)
 		return
 	}
 
