@@ -52,10 +52,10 @@ func (u *Usuario) Preparar() {
 
 func manipularData() string {
 	t := time.Now()
-	formatted := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
+	dataFormatada := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
 		t.Year(), t.Month(), t.Day(),
 		t.Hour(), t.Minute(), t.Second())
-	return formatted
+	return dataFormatada
 }
 
 
