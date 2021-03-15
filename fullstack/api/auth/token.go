@@ -13,6 +13,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+// Cria token para cada usuário 
 func CriarToken(user_id uint32) (string, error) {
 	requerimento := jwt.MapClaims{}
 	requerimento["authorized"] = true
@@ -23,6 +24,7 @@ func CriarToken(user_id uint32) (string, error) {
 
 }
 
+// Valida o token passado na requisição
 func ValidarToken(r *http.Request) error {
 	tokenString := ExtrairToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
