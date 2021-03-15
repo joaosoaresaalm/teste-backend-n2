@@ -7,19 +7,16 @@ import (
 
 func FormatError(err string) error {
 
-	if strings.Contains(err, "nickname") {
-		return errors.New("Nickname Already Taken")
+	if strings.Contains(err, "nome") {
+		return errors.New("Nome já existe")
 	}
 
 	if strings.Contains(err, "email") {
-		return errors.New("Email Already Taken")
+		return errors.New("Email já existe")
 	}
 
-	if strings.Contains(err, "title") {
-		return errors.New("Title Already Taken")
-	}
 	if strings.Contains(err, "hashedPassword") {
-		return errors.New("Incorrect Password")
+		return errors.New("Senha incorreta")
 	}
-	return errors.New("Incorrect Details")
+	return errors.New("Dados incorretos")
 }
