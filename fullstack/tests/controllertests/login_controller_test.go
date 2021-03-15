@@ -13,7 +13,7 @@ import (
 	"gopkg.in/go-playground/assert.v1"
 )
 
-func TestSignIn(t *testing.T) {
+func TestLogarDB(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -73,37 +73,37 @@ func TestLogin(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			inputJSON:    `{"email": "joaosoaresa.alm@gmail.com", "password": "Akfpt6sg"}`,
+			inputJSON:    `{"email": "vitao@gmail.com", "senha": "password"}`,
 			statusCode:   200,
 			errorMessage: "",
 		},
 		{
-			inputJSON:    `{"email": "joaosoaresa.alm@gmail.com", "password": "password eele"}`,
+			inputJSON:    `{"email": "vitao@gmail.com", "senha": "password eele"}`,
 			statusCode:   422,
 			errorMessage: "Incorrect Password",
 		},
 		{
-			inputJSON:    `{"email": "jo@gmail.com", "password": "password"}`,
+			inputJSON:    `{"email": "jo@gmail.com", "senha": "password"}`,
 			statusCode:   422,
 			errorMessage: "Infos incorretas",
 		},
 		{
-			inputJSON:    `{"email": "kangmail.com", "password": "Akfpt6sg"}`,
+			inputJSON:    `{"email": "kangmail.com", "senha": "Akfpt6sg"}`,
 			statusCode:   422,
 			errorMessage: "Email inválido",
 		},
 		{
-			inputJSON:    `{"email": "", "password": "Akfpt6sg"}`,
+			inputJSON:    `{"email": "", "senha": "Akfpt6sg"}`,
 			statusCode:   422,
 			errorMessage: "Email obrigatório",
 		},
 		{
-			inputJSON:    `{"email": "joaosoaresa.alm@gmail.com", "password": ""}`,
+			inputJSON:    `{"email": "joaosoaresa.alm@gmail.com", "senha": ""}`,
 			statusCode:   422,
 			errorMessage: "Senha obrigatória",
 		},
 		{
-			inputJSON:    `{"email": "", "password": "password"}`,
+			inputJSON:    `{"email": "", "senha": "password"}`,
 			statusCode:   422,
 			errorMessage: "Email obrigatório",
 		},

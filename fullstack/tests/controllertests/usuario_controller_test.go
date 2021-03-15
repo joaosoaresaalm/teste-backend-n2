@@ -15,7 +15,7 @@ import (
 	"gopkg.in/go-playground/assert.v1"
 )
 
-func TestCreateUser(t *testing.T) {
+func TestCriar(t *testing.T) {
 
 	err := refreshUserTable()
 	if err != nil {
@@ -194,7 +194,7 @@ func TestAtualizar(t *testing.T) {
 		}
 		AuthID = user.ID
 		AuthEmail = user.Email
-		AuthPassword = "senha" // Observe que a senha no banco de dados já está com hash, queremos sem hash
+		AuthPassword = "password" // Observe que a senha no banco de dados já está com hash, queremos sem hash
 	}
 	// Faça o login do usuário e obtenha o token de autenticação
 	token, err := server.SignIn(AuthEmail, AuthPassword)
@@ -236,7 +236,7 @@ func TestAtualizar(t *testing.T) {
 			atualizarJSON:   `{"nome":"joe", "email": "joe@gmail.com", "senha": "senha"}`,
 			statusCodigo:   401,
 			tokenGiven:   "",
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 		{
 			// Quando o token incorreto foi passado
@@ -244,7 +244,7 @@ func TestAtualizar(t *testing.T) {
 			atualizarJSON:   `{"nome":"johnnyboy", "email": "johnnyboy@gmail.com", "senha": "senha"}`,
 			statusCodigo:   401,
 			tokenGiven:   "Token informado incorreto",
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 		{
 			// Lembre-se de que joao@gmail.com" pertence ao usuário 2
@@ -264,14 +264,14 @@ func TestAtualizar(t *testing.T) {
 		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nome":"Victor", "email": "victorgmail.com", "senha": "senha"}`,
+			atualizarJSON:   `{"nome":"João Soares", "email": "joaosoaresa.alm@gmail.com", "senha": "password"}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Email inválido",
 		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
-			atualizarJSON:   `{"nome": "", "email": "vitin@gmail.com", "senha": "senha"}`,
+			atualizarJSON:   `{"nome": "", "email": "joaosoaresa.alm@gmail.com", "senha": "password"}`,
 			statusCodigo:   422,
 			tokenGiven:   tokenString,
 			erroMessagem: "Nome obrigatório",
@@ -294,7 +294,7 @@ func TestAtualizar(t *testing.T) {
 			atualizarJSON:   `{"nome": "Victor", "email": "victor@gmail.com", "senha": "senha"}`,
 			tokenGiven:   tokenString,
 			statusCodigo:   401,
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 	}
 
@@ -377,14 +377,14 @@ func TestDeletar(t *testing.T) {
 			id:           strconv.Itoa(int(AuthID)),
 			tokenGiven:   "",
 			statusCodigo:   401,
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 		{
 			// Quando um token incorreto é fornecido
 			id:           strconv.Itoa(int(AuthID)),
 			tokenGiven:   "Este é um token inválido",
 			statusCodigo:   401,
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 		{
 			id:         "unknwon",
@@ -396,7 +396,7 @@ func TestDeletar(t *testing.T) {
 			id:           strconv.Itoa(int(2)),
 			tokenGiven:   tokenString,
 			statusCodigo:   401,
-			erroMessagem: "Não autorizado",
+			erroMessagem: "Unauthorized",
 		},
 	}
 	for _, v := range usuarioModel {
