@@ -131,7 +131,7 @@ func (server *Servidor) Deletar(w http.ResponseWriter, r *http.Request) {
 	}
 	tokenID, err := auth.ExtrairTokenID(r)
 	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Não Autorizado"))
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 	if tokenID != 0 && tokenID != uint32(uid) {
