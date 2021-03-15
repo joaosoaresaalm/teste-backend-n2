@@ -10,9 +10,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	// "github.com/streadway/amqp"
-	//"github.com/satori/go.uuid"
-	//"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,8 +20,8 @@ type Usuario struct {
 	Endereco  string    `gorm:"size:255;not null;" json:endereco`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Senha     string    `gorm:"size:100;not null;" json:"senha"`
-	CriadoEm time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"criado_em"`
-	AtualizadoEm time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"atualizado_em"`
+	CriadoEm  string     `gorm:json:"criado_em"`
+	AtualizadoEm string  `gorm:json:"atualizado_em"`
 }
 
 func Hash(senha string) ([]byte, error) {
@@ -45,15 +42,21 @@ func (u *Usuario) salvarAntes() error {
 }
 
 func (u *Usuario) Preparar() {
-	
 	u.ID = 0;
 	u.Nome = html.EscapeString(strings.TrimSpace(u.Nome))
 	u.Endereco = html.EscapeString(strings.TrimSpace(u.Endereco))
-	u.CriadoEm = time.Now()
-	u.AtualizadoEm = time.Now()
+	u.CriadoEm = manipularData()
+	u.AtualizadoEm = manipularData()
 
 }
 
+func manipularData() string {
+	t := time.Now()
+	formatted := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
+		t.Year(), t.Month(), t.Day(),
+		t.Hour(), t.Minute(), t.Second())
+	return formatted
+}
 
 
 func (u *Usuario) Validar(action string) error {
